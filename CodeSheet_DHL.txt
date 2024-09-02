@@ -152,3 +152,32 @@ VALUES
 (2, 2, 2, '2024-08-19'),
 (3, 3, 3, '2024-08-18'),
 (4, 4, 4, '2024-08-17');
+
+-- Grant access to Admin
+GRANT ALL ON Employees TO Admin;
+GRANT ALL ON Warehouses TO Admin;
+GRANT ALL ON Routes TO Admin;
+GRANT ALL ON Vehicles TO Admin;
+GRANT SELECT ON Customers TO Admin;
+GRANT SELECT ON Shipments TO Admin;
+GRANT SELECT ON Packages TO Admin;
+GRANT SELECT ON Inventory TO Admin;
+GRANT SELECT ON Deliveries TO Admin;
+
+-- Grant access to Customer Service
+GRANT SELECT, INSERT, UPDATE ON Customers TO CustomerService;
+GRANT SELECT, INSERT, UPDATE ON Shipments TO CustomerService;
+GRANT SELECT, INSERT, UPDATE ON Packages TO CustomerService;
+
+-- Grant access to Warehouse Manager
+GRANT SELECT, INSERT, UPDATE ON Warehouses TO WarehouseManager;
+GRANT SELECT, INSERT, UPDATE ON Inventory TO WarehouseManager;
+GRANT SELECT, INSERT, UPDATE ON Deliveries TO WarehouseManager;
+
+-- Grant access to Logistics
+GRANT SELECT ON Routes TO Logistics;
+GRANT SELECT, INSERT, UPDATE ON Vehicles TO Logistics;
+GRANT SELECT, INSERT, UPDATE ON Deliveries TO Logistics;
+
+-- Grant access to Human Resources
+GRANT SELECT, INSERT, UPDATE ON Employees TO HumanResources;
