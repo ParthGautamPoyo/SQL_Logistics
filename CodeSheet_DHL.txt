@@ -1,35 +1,85 @@
 -- Create Customers table
 CREATE TABLE Customers (
     CustomerID INT PRIMARY KEY,
-    Name VARCHAR(100),
-    Address VARCHAR(255),
-    PhoneNumber VARCHAR(20),
-    Email VARCHAR(100)
+    Name VARCHAR(50),
+    Address VARCHAR(100),
+    PhoneNumber VARCHAR(15),
+    Email VARCHAR(70)
 );
 
 -- Create Employees table
 CREATE TABLE Employees (
     EmployeeID INT PRIMARY KEY,
-    Name VARCHAR(100),
+    Name VARCHAR(50),
     Position VARCHAR(50),
-    Department VARCHAR(50),
-    Email VARCHAR(100)
+    Department VARCHAR(20),
+    Email VARCHAR(70)
 );
 
 -- Create Warehouses table
 CREATE TABLE Warehouses (
     WarehouseID INT PRIMARY KEY,
-    Location VARCHAR(100),
+    Location VARCHAR(30),
     Capacity DECIMAL(10,2)
 );
 
 -- Create Routes table (must be before Vehicles)
 CREATE TABLE Routes (
     RouteID INT PRIMARY KEY,
-    Origin VARCHAR(100),
-    Destination VARCHAR(100),
+    Origin VARCHAR(30),
+    Destination VARCHAR(30),
     Distance DECIMAL(10,2)
 );
+
+-- Create Vehicles table (after Routes)
+CREATE TABLE Vehicles (
+    VehicleID INT PRIMARY KEY,
+    VehicleNumber VARCHAR(20),
+    RouteID INT,
+    Capacity DECIMAL(10,2),
+    FOREIGN KEY (RouteID) REFERENCES Routes(RouteID)
+);
+
+-- Create Shipments table
+CREATE TABLE Shipments (
+    ShipmentID INT PRIMARY KEY,
+    CustomerID INT,
+    EmployeeID INT,
+    ShipmentDate DATE,
+    Status VARCHAR(20),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
+
+-- Create Packages table
+CREATE TABLE Packages (
+    PackageID INT PRIMARY KEY,
+    ShipmentID INT,
+    Weight DECIMAL(10,2),
+    Dimensions VARCHAR(50),
+    FOREIGN KEY (ShipmentID) REFERENCES Shipments(ShipmentID)
+);
+
+-- Create Inventory table
+CREATE TABLE Inventory (
+    InventoryID INT PRIMARY KEY,
+    WarehouseID INT,
+    PackageID INT,
+    Quantity INT,
+    FOREIGN KEY (WarehouseID) REFERENCES Warehouses(WarehouseID),
+    FOREIGN KEY (PackageID) REFERENCES Packages(PackageID)
+);
+
+-- Create Deliveries table (after Vehicles)
+CREATE TABLE Deliveries (
+    DeliveryID INT PRIMARY KEY,
+    PackageID INT,
+    VehicleID INT,
+    DeliveryDate DATE,
+    FOREIGN KEY (PackageID) REFERENCES Packages(PackageID),
+    FOREIGN KEY (VehicleID) REFERENCES Vehicles(VehicleID)
+);
+
 ..........
 -- Insert data into Customers table
 INSERT INTO Customers (CustomerID, Name, Address, PhoneNumber, Email)
@@ -102,53 +152,3 @@ VALUES
 (2, 2, 2, '2024-08-19'),
 (3, 3, 3, '2024-08-18'),
 (4, 4, 4, '2024-08-17');
-
--- Create Vehicles table (after Routes)
-CREATE TABLE Vehicles (
-    VehicleID INT PRIMARY KEY,
-    VehicleNumber VARCHAR(50),
-    RouteID INT,
-    Capacity DECIMAL(10,2),
-    FOREIGN KEY (RouteID) REFERENCES Routes(RouteID)
-);
-
--- Create Shipments table
-CREATE TABLE Shipments (
-    ShipmentID INT PRIMARY KEY,
-    CustomerID INT,
-    EmployeeID INT,
-    ShipmentDate DATE,
-    Status VARCHAR(50),
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
-    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
-);
-
--- Create Packages table
-CREATE TABLE Packages (
-    PackageID INT PRIMARY KEY,
-    ShipmentID INT,
-    Weight DECIMAL(10,2),
-    Dimensions VARCHAR(100),
-    FOREIGN KEY (ShipmentID) REFERENCES Shipments(ShipmentID)
-);
-
--- Create Inventory table
-CREATE TABLE Inventory (
-    InventoryID INT PRIMARY KEY,
-    WarehouseID INT,
-    PackageID INT,
-    Quantity INT,
-    FOREIGN KEY (WarehouseID) REFERENCES Warehouses(WarehouseID),
-    FOREIGN KEY (PackageID) REFERENCES Packages(PackageID)
-);
-
--- Create Deliveries table (after Vehicles)
-CREATE TABLE Deliveries (
-    DeliveryID INT PRIMARY KEY,
-    PackageID INT,
-    VehicleID INT,
-    DeliveryDate DATE,
-    FOREIGN KEY (PackageID) REFERENCES Packages(PackageID),
-    FOREIGN KEY (VehicleID) REFERENCES Vehicles(VehicleID)
-);
-
